@@ -1,11 +1,12 @@
 {
   "name": "pill-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "license": "MIT",
   "private": true,
   "description": "Track medication and when you've taken it.",
   "repository": "https://github.com/viztheman/pill-tracker.git",
+  "author": "Daniel Hammond",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.65",
     "@electron-forge/maker-deb": "^6.0.0-beta.65",

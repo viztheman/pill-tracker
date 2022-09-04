@@ -1,4 +1,5 @@
 const {app, Tray, Menu, nativeImage} = require('electron');
+if (require('electron-squirrel-startup')) return app.quit();
 
 const MedicationsIpc = require('./server/medications-ipc');
 const Storage = require('./server/storage');
