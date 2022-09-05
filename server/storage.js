@@ -3,7 +3,8 @@ const STORAGE_KEY = 'storage';
 const jsonStorage = require('electron-json-storage');
 
 class Storage {
-	constructor() {
+	constructor(dataPath) {
+		jsonStorage.setDataPath(dataPath);
 		this._storage = jsonStorage.getSync(STORAGE_KEY);
 
 		if (Object.keys(this._storage).length === 0)

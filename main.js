@@ -1,17 +1,19 @@
 const {app, Tray, Menu, nativeImage} = require('electron');
 if (require('electron-squirrel-startup')) return app.quit();
 
+const path = require('path');
+const MainWindow = require('./main-window');
 const MedicationsIpc = require('./server/medications-ipc');
 const Storage = require('./server/storage');
 const Scheduler = require('./server/scheduler');
-const MainWindow = require('./server/main-window');
 
-const storage = new Storage();
+const storage = new Storage(path.join(app.getPath('userData'), 'storage'));
 
 app.whenReady().then(() => {
 	const mainWindow = new MainWindow();
 
-	const trayIcon = new Tray('./icon.png');
+	const icon = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
+	const trayIcon = new Tray(icon);
 	const contextMenu = Menu.buildFromTemplate([
 		{label: 'Pill Tracker', enabled: false},
 		{type: 'separator'},

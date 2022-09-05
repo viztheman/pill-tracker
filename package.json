@@ -1,6 +1,6 @@
 {
   "name": "pill-tracker",
-  "version": "1.0.1",
+  "version": "1.0.2-rc",
   "main": "main.js",
   "license": "MIT",
   "private": true,
@@ -13,12 +13,14 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.65",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
     "@electron-forge/maker-zip": "^6.0.0-beta.65",
+    "@electron-forge/publisher-github": "^6.0.0-beta.65",
     "electron": "^20.1.1"
   },
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+	"publish": "electron-forge publish"
   },
   "dependencies": {
     "bootstrap": "^5.2.0",
@@ -31,6 +33,17 @@
   "config": {
     "forge": {
       "packagerConfig": {},
+	  "publishers": [
+	  	{
+	      "name": "@electron-forge/publisher-github",
+		  "config": {
+		  	"repository": {
+			  "owner": "viztheman",
+			  "name": "pill-tracker"
+		    }
+		  }
+	    }
+	  ],
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

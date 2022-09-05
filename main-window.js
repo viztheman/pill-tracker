@@ -6,10 +6,10 @@ module.exports = function MainWindow() {
 		width: 800,
 		height: 600,
 		webPreferences: {
-			preload: path.join(__dirname, '../preload.js')
+			preload: path.join(__dirname, 'preload.js')
 		}
 	});
 
-	mainWindow.loadFile('./views/index.html');
+	mainWindow.loadFile(path.join(__dirname, 'views', 'index.html'));
 	return mainWindow;
 };
