@@ -22,17 +22,27 @@ class Scheduler {
 		return now > then;
 	}
 
-	resetIfNeeded(sendRefresh) {
-		if (!this._needsReset)
-			return;
-
+	_reset() {
 		for (const medication of this._storage.medications) {
 			medication.morning = false;
 			medication.afternoon = false;
 			medication.evening = false;
 		}
+
 		this._storage.lastUpdated = Date.now();
 		this._storage.save();
+	}
+
+	forceReset() {
+		this._reset()
+		this._ipc.refresh(this._storage.medications);
+	}
+
+	resetIfNeeded(sendRefresh) {
+		if (!this._needsReset)
+			return;
+
+		this._reset();
 
 		if (sendRefresh)
 			this._ipc.refresh(storage.medications);
