@@ -41,7 +41,8 @@
 			  "owner": "viztheman",
 			  "name": "pill-tracker"
 		    }
-		  }
+		  },
+		  "draft": true
 	    }
 	  ],
       "makers": [
