@@ -6,8 +6,16 @@ function VersionsViewModel(medications) {
 	this.name = ko.observable();
 	this.dosage = ko.observable();
 
+	this.showNoMedication = ko.pureComputed(() => {
+		return !this.addRemoveSwitch() && this.medications().length === 0
+			? 'd-flex'
+			: 'd-none';
+	});
+
 	this.showMedication = ko.pureComputed(() => {
-		return this.addRemoveSwitch() ? 'd-none' : 'd-flex'
+		return !this.addRemoveSwitch() && this.medications().length > 0
+			? 'd-flex'
+			: 'd-none'
 	});
 
 	this.showAddRemove = ko.pureComputed(() => {
@@ -44,6 +52,10 @@ function VersionsViewModel(medications) {
 
 		window.medications.remove(medication);
 		this.medications.splice(index, 1);
+	};
+
+	this.enableAddRemove = () => {
+		this.addRemoveSwitch(true);
 	};
 }
 
@@ -83,6 +95,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 	id = getMaxId(medications);
 
 	await loadTemplates();
+
+	if (medications.length === 0) {
+		document.getElementById('no-medications').classList.remove('d-none');
+		document.getElementById('medications').classList.add('d-none');
+	}
+	else {
+		document.getElementById('no-medications').classList.add('d-none');
+		document.getElementById('medications').classList.remove('d-none');
+	}
 
 	const viewModel = new VersionsViewModel(medications);
 	ko.applyBindings(viewModel);
