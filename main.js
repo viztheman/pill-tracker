@@ -3,9 +3,9 @@ if (require('electron-squirrel-startup')) return app.quit();
 
 const path = require('path');
 const MainWindow = require('./main-window');
-const MedicationsIpc = require('./server/medications-ipc');
-const Storage = require('./server/storage');
-const Scheduler = require('./server/scheduler');
+const MedicationsIpc = require('./lib/medications-ipc');
+const Storage = require('./lib/storage');
+const Scheduler = require('./lib/scheduler');
 
 const storage = new Storage(path.join(app.getPath('userData'), 'storage'));
 
@@ -20,7 +20,13 @@ app.whenReady().then(() => {
 		{label: 'Pill Tracker', enabled: false},
 		{type: 'separator'},
 		{label: 'Show App', click: () => mainWindow.show()},
-		{label: 'Reset', click: () => scheduler.forceReset()},
+		{type: 'separator'},
+		{label: 'Export', click: () => storage.export()},
+		{type: 'separator'},
+		{label: 'Reset', click: () => {
+			storage.reset(true);
+			ipc.refresh(storage.medications);
+		}},
 		{type: 'separator'},
 		{role: 'quit'}
 	]);
