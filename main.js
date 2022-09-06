@@ -21,10 +21,14 @@ app.whenReady().then(() => {
 		{type: 'separator'},
 		{label: 'Show App', click: () => mainWindow.show()},
 		{type: 'separator'},
-		{label: 'Export', click: () => storage.export()},
+		{label: 'Export...', click: () => storage.export()},
+		{label: 'Import...', click: () => {
+			storage.import();
+			ipc.refresh(storage.medications);
+		}},
 		{type: 'separator'},
 		{label: 'Reset', click: () => {
-			storage.reset(true);
+			storage.reset();
 			ipc.refresh(storage.medications);
 		}},
 		{type: 'separator'},
