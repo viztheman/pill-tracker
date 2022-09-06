@@ -96,6 +96,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	await loadTemplates();
 
+	if (medications.length > 0) {
+		document.getElementById('no-medications').classList.add('d-none');
+		document.getElementById('medications').classList.remove('d-none');
+	}
+	else {
+		document.getElementById('no-medications').classList.remove('d-none');
+		document.getElementById('medications').classList.add('d-none');
+	}
+
 	const viewModel = new VersionsViewModel(medications);
 	ko.applyBindings(viewModel);
 
