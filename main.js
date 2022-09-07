@@ -19,6 +19,8 @@ app.whenReady().then(() => {
 	ipc.handle('medications:get', () => storage.medications);
 	ipc.on('medications:set', (_event, medication) => storage.set(medication));
 	ipc.on('medications:remove', (_event, medication) => storage.remove(medication));
+	ipc.handle('settings:get:storagePath', (_event) => settings.storagePath);
+	ipc.on('settings:set:storagePath', (_event, newPath) => settings.storagePath = newPath);
 
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0)
