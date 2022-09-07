@@ -1,17 +1,56 @@
-const {app, ipcMain: ipc} = require('electron');
+const {app, BrowserWindow, Tray, Menu, nativeImage, ipcMain: ipc} = require('electron');
 if (require('electron-squirrel-startup')) return app.quit();
 
 const path = require('path');
-const MainWindow = require('./main-window');
 const Settings = require('./lib/settings');
 const Storage = require('./lib/storage');
 const Scheduler = require('./lib/scheduler');
 
 const storage = new Storage(path.join(app.getPath('userData'), 'storage'));
 
+function createWindow() {
+	const mainWindow = new BrowserWindow({
+         width: 800,
+         height: 600,
+         webPreferences: {
+             preload: path.join(__dirname, 'preload.js')
+         }
+     });
+
+     mainWindow.loadFile(path.join(__dirname, 'views', 'index.html'));
+     return mainWindow;
+}
+
+function createTrayIcon() {
+}
+
 app.whenReady().then(() => {
-	const mainWindow = new MainWindow();
-	const trayIcon = require('./lib/tray-icon');
+	const mainWindow = createWindow();
+	const icon = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
+	const trayIcon = new Tray(icon);
+
+	const contextMenu = Menu.buildFromTemplate([
+		{label: 'Pill Tracker', enabled: false},
+		{type: 'separator'},
+		{label: 'Show App', click: () => mainWindow.show()},
+		{type: 'separator'},
+		{label: 'Export...', click: () => storage.export()},
+		{label: 'Import...', click: () => {
+			storage.import();
+			ipc.refresh(storage.medications);
+		}},
+		{type: 'separator'},
+		{label: 'Reset', click: () => {
+			storage.reset();
+			ipc.refresh(storage.medications);
+		}},
+		{type: 'separator'},
+		{role: 'quit'}
+	]);
+	trayIcon.setContextMenu(contextMenu);
+	trayIcon.setToolTip('Pill Tracker');
+	trayIcon.setTitle('Pill Tracker');
+
 	const settings = new Settings();
 	const storage = new Storage(settings);
 	const scheduler = new Scheduler(mainWindow, storage);
@@ -24,6 +63,7 @@ app.whenReady().then(() => {
 	ipc.handle('settings:set:storagePath', (_e, path) => {
 		const newPath = settings.setStoragePath(path);
 		if (newPath) storage.save();
+
 		return newPath;
 	});
 
