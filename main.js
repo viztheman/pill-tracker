@@ -1,42 +1,24 @@
-const {app, Tray, Menu, nativeImage} = require('electron');
+const {app, ipcMain: ipc} = require('electron');
 if (require('electron-squirrel-startup')) return app.quit();
 
 const path = require('path');
 const MainWindow = require('./main-window');
-const MedicationsIpc = require('./lib/medications-ipc');
+const Settings = require('./lib/settings');
 const Storage = require('./lib/storage');
 const Scheduler = require('./lib/scheduler');
 
 const storage = new Storage(path.join(app.getPath('userData'), 'storage'));
 
 app.whenReady().then(() => {
+	const trayIcon = require('./lib/tray-icon');
 	const mainWindow = new MainWindow();
-	const ipc = new MedicationsIpc(mainWindow, storage);
-	const scheduler = new Scheduler(ipc, storage);
+	const settings = new Settings();
+	const storage = new Storage(settings);
+	const scheduler = new Scheduler(mainWindow, storage);
 
-	const icon = nativeImage.createFromPath(path.join(__dirname, 'icon.png'));
-	const trayIcon = new Tray(icon);
-	const contextMenu = Menu.buildFromTemplate([
-		{label: 'Pill Tracker', enabled: false},
-		{type: 'separator'},
-		{label: 'Show App', click: () => mainWindow.show()},
-		{type: 'separator'},
-		{label: 'Export...', click: () => storage.export()},
-		{label: 'Import...', click: () => {
-			storage.import();
-			ipc.refresh(storage.medications);
-		}},
-		{type: 'separator'},
-		{label: 'Reset', click: () => {
-			storage.reset();
-			ipc.refresh(storage.medications);
-		}},
-		{type: 'separator'},
-		{role: 'quit'}
-	]);
-	trayIcon.setToolTip('Pill Tracker');
-	trayIcon.setTitle('Pill Tracker');
-	trayIcon.setContextMenu(contextMenu);
+	ipc.handle('medications:get', () => storage.medications);
+	ipc.on('medications:set', (_event, medication) => storage.set(medication));
+	ipc.on('medications:remove', (_event, medication) => storage.remove(medication));
 
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0)

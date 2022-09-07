@@ -2,8 +2,8 @@ const {contextBridge, ipcRenderer} = require('electron');
 
 contextBridge.exposeInMainWorld('medications', {
 	get: () => ipcRenderer.invoke('medications:get'),
-	set: (medication) => ipcRenderer.invoke('medications:set', medication),
-	remove: (medication) => ipcRenderer.invoke('medications:remove', medication),
+	set: (medication) => ipcRenderer.send('medications:set', medication),
+	remove: (medication) => ipcRenderer.send('medications:remove', medication),
 
-	onRefresh: (callback) => ipcRenderer.on('medications:refresh', callback)
+	onReset: (callback) => ipcRenderer.on('medications:reset', callback)
 });
