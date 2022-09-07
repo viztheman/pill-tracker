@@ -10,17 +10,22 @@ const Scheduler = require('./lib/scheduler');
 const storage = new Storage(path.join(app.getPath('userData'), 'storage'));
 
 app.whenReady().then(() => {
-	const trayIcon = require('./lib/tray-icon');
 	const mainWindow = new MainWindow();
+	const trayIcon = require('./lib/tray-icon');
 	const settings = new Settings();
 	const storage = new Storage(settings);
 	const scheduler = new Scheduler(mainWindow, storage);
 
 	ipc.handle('medications:get', () => storage.medications);
-	ipc.on('medications:set', (_event, medication) => storage.set(medication));
-	ipc.on('medications:remove', (_event, medication) => storage.remove(medication));
-	ipc.handle('settings:get:storagePath', (_event) => settings.storagePath);
-	ipc.on('settings:set:storagePath', (_event, newPath) => settings.storagePath = newPath);
+	ipc.on('medications:set', (_e, med) => storage.set(med));
+	ipc.on('medications:remove', (_e, med) => storage.remove(med));
+
+	ipc.handle('settings:get:storagePath', () => settings.storagePath);
+	ipc.handle('settings:set:storagePath', (_e, path) => {
+		const newPath = settings.setStoragePath(path);
+		if (newPath) storage.save();
+		return newPath;
+	});
 
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0)

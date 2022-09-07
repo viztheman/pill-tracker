@@ -73,6 +73,12 @@
 			window.medications.remove(medication);
 			this.medications.splice(index, 1);
 		};
+
+		this.storagePathClick = async () => {
+			const newStoragePath = await window.settings.setStoragePath();
+			if (newStoragePath)
+				this.storagePath(newStoragePath);
+		};
 	}
 
 	document.addEventListener('DOMContentLoaded', async () => {

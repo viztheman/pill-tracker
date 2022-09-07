@@ -9,5 +9,5 @@ contextBridge.exposeInMainWorld('medications', {
 
 contextBridge.exposeInMainWorld('settings', {
 	getStoragePath: () => ipcRenderer.invoke('settings:get:storagePath'),
-	setStoragePath: () => ipcRenderer.send('settings:set:storagePath')
+	setStoragePath: () => ipcRenderer.invoke('settings:set:storagePath')
 });
