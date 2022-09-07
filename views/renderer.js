@@ -1,25 +1,44 @@
 let id;
 
-function VersionsViewModel(medications) {
-	this.addRemoveSwitch = ko.observable();
-	this.medications = ko.observableArray(medications);
-	this.name = ko.observable();
-	this.dosage = ko.observable();
+function VersionsViewModel() {
+	this.medications = ko.observableArray([]);
+	this.addRemoveSwitch = ko.observable(false);
+	this.name = ko.observable(null);
+	this.dosage = ko.observable(null);
+	this.showSettings = ko.observable(false);
 
-	this.showNoMedication = ko.pureComputed(() => {
-		return !this.addRemoveSwitch() && this.medications().length === 0
+	this.mainPanelClass = ko.pureComputed(() => {
+		const showSettings = this.showSettings();
+		return !showSettings ? 'd-flex' : 'd-none';
+	});
+
+	this.noMedicationsClass = ko.pureComputed(() => {
+		const addRemoveSwitch = this.addRemoveSwitch();
+		const length = this.medications().length;
+
+		return !addRemoveSwitch && length === 0
 			? 'd-flex'
 			: 'd-none';
 	});
 
-	this.showMedication = ko.pureComputed(() => {
-		return !this.addRemoveSwitch() && this.medications().length > 0
+	this.medicationsClass = ko.pureComputed(() => {
+		const addRemoveSwitch = this.addRemoveSwitch();
+		const length = this.medications().length;
+
+		return !addRemoveSwitch && length > 0
 			? 'd-flex'
-			: 'd-none'
+			: 'd-none';
 	});
 
-	this.showAddRemove = ko.pureComputed(() => {
-		return this.addRemoveSwitch() ? 'd-flex' : 'd-none'
+	this.addRemoveClass = ko.pureComputed(() => {
+		const addRemoveSwitch = this.addRemoveSwitch();
+		return addRemoveSwitch ? 'd-flex' : 'd-none';
+	});
+
+	this.settingsPanelClass = ko.pureComputed(() => {
+		const showSettings = this.showSettings();
+
+		return showSettings ? 'd-flex' : 'd-none';
 	});
 
 	this.setMedication = (medication) => {
@@ -54,8 +73,16 @@ function VersionsViewModel(medications) {
 		this.medications.splice(index, 1);
 	};
 
-	this.enableAddRemove = () => {
+	this.addRemoveClick = () => {
 		this.addRemoveSwitch(true);
+	};
+
+	this.gearClick = () => {
+		this.showSettings(true);
+	};
+
+	this.backButtonClick = () => {
+		this.showSettings(false);
 	};
 }
 
@@ -96,17 +123,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	await loadTemplates();
 
-	if (medications.length > 0) {
-		document.getElementById('no-medications').classList.add('d-none');
-		document.getElementById('medications').classList.remove('d-none');
-	}
-	else {
-		document.getElementById('no-medications').classList.remove('d-none');
-		document.getElementById('medications').classList.add('d-none');
-	}
-
 	const viewModel = new VersionsViewModel(medications);
 	ko.applyBindings(viewModel);
+	viewModel.medications(medications);
 
 	window.medications.onRefresh((_event, medications) => {
 		viewModel.medications(medications);
