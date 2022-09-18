@@ -25,25 +25,15 @@
 		</div>
 	</div>
 	<div class="flex-column" style="height: 100vh; display: none;" data-bind="class: settingsPanelClass">
-		<div class="d-flex flex-row align-items-center">
-			<div>
-				<button type="button" class="btn btn-secondary btn-sm" data-bind="click: backButtonClick">&lt;&lt; Back</button>
-			</div>
-			<h1 class="flex-grow-1 ms-2">Settings</h1>
-		</div>
-		<div class="mt-3">
-			<label for="storage-path" class="form-label">Storage Path:</label>
-			<input type="text" id="storage-path" class="form-control" placeholder="Click to set" readonly data-bind="value: storagePath, click: storagePathClick">
-		</div>
+		<div id="settings" data-bind="template: {name: 'settings-form-template'}"></div>
 	</div>
 
 	<script type="text/html" src="./medication-row.html" id="medication-row-template"></script>
-
 	<script type="text/html" src="./add-remove-form.html" id="add-remove-form-template"></script>
+	<script type="text/html" src="./settings-form.html" id="settings-form-template"></script>
 
 	<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="../node_modules/knockout/build/output/knockout-latest.js"></script>
-	<script src="./luxon.min.js"></script>
 	<script src="./templates.js"></script>
 	<script src="./renderer.js"></script>
 </body>

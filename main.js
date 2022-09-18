@@ -56,9 +56,14 @@ app.whenReady().then(() => {
 	const scheduler = new Scheduler(mainWindow, storage);
 
 	ipc.handle('medications:get', () => storage.medications);
-	ipc.on('medications:set', (_e, med) => storage.set(med));
+	ipc.handle('medications:set', (_e, med) => storage.set(med));
 	ipc.on('medications:remove', (_e, med) => storage.remove(med));
 
+	ipc.handle('settings:get:useCloudStorage', () => settings.useCloudStorage);
+	ipc.on('settings:set:useCloudStorage', (_e, useCloud) => {
+		settings.useCloudStorage = useCloud;
+		storage.save();
+	});
 	ipc.handle('settings:get:storagePath', () => settings.storagePath);
 	ipc.handle('settings:set:storagePath', (_e, path) => {
 		const newPath = settings.setStoragePath(path);

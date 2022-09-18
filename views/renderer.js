@@ -7,6 +7,7 @@
 		this.name = ko.observable(null);
 		this.dosage = ko.observable(null);
 		this.showSettings = ko.observable(false);
+		this.useCloudStorage = ko.observable(false);
 		this.storagePath = ko.observable(null);
 
 		this.mainPanelClass = ko.pureComputed(() => {
@@ -37,6 +38,11 @@
 			return addRemoveSwitch ? 'd-flex' : 'd-none';
 		});
 
+		this.useCloudStorageClass = ko.pureComputed(() => {
+			const useCloudStorage = this.useCloudStorage();
+			return useCloudStorage ? 'd-block' : 'd-none';
+		});
+
 		this.settingsPanelClass = ko.pureComputed(() => {
 			const showSettings = this.showSettings();
 			return showSettings ? 'd-flex' : 'd-none';
@@ -47,7 +53,7 @@
 		this.setMedication = (medication) => window.medications.set(medication);
 		this.backButtonClick = () => this.showSettings(false);
 
-		this.addMedication = () => {
+		this.addMedication = async () => {
 			if (!this.name() || !this.dosage())
 				return;
 
@@ -58,9 +64,9 @@
 				afternoon: false,
 				evening: false
 			};
-			window.medications.set(medication);
+			const result = await window.medications.set(medication);
 
-			this.medications.push(medication);
+			this.medications.push(result);
 			this.name(null);
 			this.dosage(null);
 			document.getElementById('name').focus();
@@ -74,6 +80,12 @@
 			this.medications.splice(index, 1);
 		};
 
+		this.useCloudStorageClick = () => {
+			console.log(this.useCloudStorage());
+			window.settings.setUseCloudStorage(this.useCloudStorage());
+			return true;
+		};
+
 		this.storagePathClick = async () => {
 			const newStoragePath = await window.settings.setStoragePath();
 			if (newStoragePath)
@@ -84,12 +96,14 @@
 	document.addEventListener('DOMContentLoaded', async () => {
 		await window.loadTemplates();
 
+		const useCloudStorage = await window.settings.getUseCloudStorage();
 		const storagePath = await window.settings.getStoragePath();
 		const medications = await window.medications.get();
 
-		const viewModel = new VersionsViewModel(medications);
+		const viewModel = new VersionsViewModel();
 		ko.applyBindings(viewModel);
 		viewModel.medications(medications);
+		viewModel.useCloudStorage(useCloudStorage);
 		viewModel.storagePath(storagePath);
 
 		window.medications.onReset((_event, medications) => {
