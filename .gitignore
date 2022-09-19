@@ -105,3 +105,6 @@ dist
 
 # Electron Forge output
 out/
+
+# VIM swap
+*.swp

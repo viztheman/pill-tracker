@@ -113,5 +113,9 @@
 		viewModel.medications(medications);
 		viewModel.useCloudStorage(useCloudStorage);
 		viewModel.storagePath(storagePath);
+
+		window.medications.onReset((_e, medications) => {
+			viewModel.medications(medications);
+		});
 	});
 })();
