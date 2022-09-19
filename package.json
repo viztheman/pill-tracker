@@ -1,6 +1,6 @@
 {
   "name": "pill-tracker",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "main": "main.js",
   "license": "MIT",
   "private": true,
@@ -22,7 +22,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-	"watch": "electronmon ."
+    "watch": "electronmon ."
   },
   "dependencies": {
     "bootstrap": "^5.2.0",
