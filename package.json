@@ -14,13 +14,15 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
     "@electron-forge/maker-zip": "^6.0.0-beta.65",
     "@electron-forge/publisher-github": "^6.0.0-beta.65",
-    "electron": "^20.1.1"
+    "electron": "^20.1.1",
+    "electronmon": "^2.0.2"
   },
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "publish": "electron-forge publish",
+	"watch": "electronmon ."
   },
   "dependencies": {
     "bootstrap": "^5.2.0",

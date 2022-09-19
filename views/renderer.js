@@ -53,7 +53,26 @@
 		this.setMedication = (medication) => window.medications.set(medication);
 		this.backButtonClick = () => this.showSettings(false);
 
-		this.addMedication = async () => {
+		this.useCloudStorageClick = () => {
+			(async () => {
+				window.settings.setUseCloudStorage(this.useCloudStorage());
+
+				const medications = await window.medications.refresh();
+				this.medications(medications);
+			})();
+
+			return true;
+		};
+
+		this.storagePathClick = async () => {
+			const newStoragePath = await window.settings.setStoragePath();
+			if (!newStoragePath) return;
+
+			const medications = await window.medications.refresh();
+			this.medications(medications);
+		};
+
+		this.addMedicationClick = async () => {
 			if (!this.name() || !this.dosage())
 				return;
 
@@ -65,6 +84,7 @@
 				evening: false
 			};
 			const result = await window.medications.set(medication);
+			console.dir(result);
 
 			this.medications.push(result);
 			this.name(null);
@@ -72,24 +92,12 @@
 			document.getElementById('name').focus();
 		};
 
-		this.removeMedication = (medication) => {
+		this.removeMedicationClick = (medication) => {
 			const index = this.medications.indexOf(medication);
 			if (index < 0) return;
 
 			window.medications.remove(medication);
 			this.medications.splice(index, 1);
-		};
-
-		this.useCloudStorageClick = () => {
-			console.log(this.useCloudStorage());
-			window.settings.setUseCloudStorage(this.useCloudStorage());
-			return true;
-		};
-
-		this.storagePathClick = async () => {
-			const newStoragePath = await window.settings.setStoragePath();
-			if (newStoragePath)
-				this.storagePath(newStoragePath);
 		};
 	}
 
@@ -105,9 +113,5 @@
 		viewModel.medications(medications);
 		viewModel.useCloudStorage(useCloudStorage);
 		viewModel.storagePath(storagePath);
-
-		window.medications.onReset((_event, medications) => {
-			viewModel.medications(medications);
-		});
 	});
 })();
