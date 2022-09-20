@@ -5,7 +5,8 @@ contextBridge.exposeInMainWorld('medications', {
 	set: (medication) => ipcRenderer.invoke('medications:set', medication),
 	remove: (medication) => ipcRenderer.send('medications:remove', medication),
 	refresh: () => ipcRenderer.invoke('medications:refresh'),
-	ping: () => ipcRenderer.invoke('medications:ping')
+	ping: () => ipcRenderer.invoke('medications:ping'),
+	onReset: (callback) => ipcRenderer.on('medications:reset', callback)
 });
 
 contextBridge.exposeInMainWorld('settings', {

@@ -114,6 +114,10 @@
 		viewModel.useCloudStorage(useCloudStorage);
 		viewModel.storagePath(storagePath);
 
+		window.medications.onReset((_e, medications) => {
+			viewModel.medications(medications);
+		});
+
 		window.setInterval(async () => {
 			const medications = await window.medications.ping();
 			if (!medications) return;
