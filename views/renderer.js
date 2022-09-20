@@ -114,8 +114,11 @@
 		viewModel.useCloudStorage(useCloudStorage);
 		viewModel.storagePath(storagePath);
 
-		window.medications.onReset((_e, medications) => {
+		window.setInterval(async () => {
+			const medications = await window.medications.ping();
+			if (!medications) return;
+
 			viewModel.medications(medications);
-		});
+		}, 5000);
 	});
 })();
