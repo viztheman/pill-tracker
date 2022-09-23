@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld('medications', {
 
 contextBridge.exposeInMainWorld('settings', {
 	getUseCloudStorage: () => ipcRenderer.invoke('settings:get:useCloudStorage'),
-	setUseCloudStorage: (useCloud) => ipcRenderer.send('settings:set:useCloudStorage', useCloud),
+	setUseCloudStorage: (useCloud) => ipcRenderer.invoke('settings:set:useCloudStorage', useCloud),
 	getStoragePath: () => ipcRenderer.invoke('settings:get:storagePath'),
 	setStoragePath: () => ipcRenderer.invoke('settings:set:storagePath')
 });

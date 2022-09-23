@@ -67,6 +67,7 @@
 		this.storagePathClick = async () => {
 			const newStoragePath = await window.settings.setStoragePath();
 			if (!newStoragePath) return;
+			this.storagePath(newStoragePath);
 
 			const medications = await window.medications.refresh();
 			this.medications(medications);
