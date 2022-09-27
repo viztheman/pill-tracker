@@ -1,0 +1,26 @@
+body {
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.main {
+	height: 100vh;
+}
+
+.medication-row {
+	width: 100%;
+}
+
+.medication-row>div:first-child {
+	width: 35%;
+}
+
+.medication-table tbody {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.settings {
+	height: 100vh;
+}

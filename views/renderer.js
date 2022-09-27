@@ -65,9 +65,9 @@
 		};
 
 		this.storagePathClick = async () => {
-			const newStoragePath = await window.settings.setStoragePath();
-			if (!newStoragePath) return;
-			this.storagePath(newStoragePath);
+			const storagePath = await window.settings.setStoragePath();
+			if (!storagePath) return;
+			this.storagePath(storagePath);
 
 			const medications = await window.medications.refresh();
 			this.medications(medications);
@@ -85,7 +85,6 @@
 				evening: false
 			};
 			const result = await window.medications.set(medication);
-			console.dir(result);
 
 			this.medications.push(result);
 			this.name(null);
@@ -103,17 +102,15 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', async () => {
-		await window.loadTemplates();
-
 		const useCloudStorage = await window.settings.getUseCloudStorage();
 		const storagePath = await window.settings.getStoragePath();
 		const medications = await window.medications.get();
 
 		const viewModel = new VersionsViewModel();
-		ko.applyBindings(viewModel);
 		viewModel.medications(medications);
 		viewModel.useCloudStorage(useCloudStorage);
 		viewModel.storagePath(storagePath);
+		ko.applyBindings(viewModel);
 
 		window.medications.onReset((_e, medications) => {
 			viewModel.medications(medications);

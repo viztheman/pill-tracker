@@ -1,16 +1,16 @@
-<div class="d-flex flex-row mt-3 justify-content-center" style="width: 100%;">
-	 <div class="me-3 text-end" style="min-width: 35%;">
+<div class="medication-row d-flex flex-row mt-3 justify-content-center">
+	<div class="me-3 text-end">
 		 <h5 class="mb-0" data-bind="text: name"></h5>
 		 <p class="fs-6" data-bind="text: dosage"></p>
 	 </div>
 	 <div class="flex-grow-1">
-		 <div class="btn-group btn-group-lg">
-			 <input type="checkbox" class="btn-check" autocomplete="off"     data-bind="attr: {id: 'morning' + id}, checked: morning, event: {change:            $parent.setMedication}">
-			 <label class="btn btn-outline-primary" data-bind="attr:         {for: 'morning' + id}">Morning</label>
-			 <input type="checkbox" class="btn-check" autocomplete="off"     data-bind="attr: {id: 'afternoon' + id}, checked: afternoon, event: {change:        $parent.setMedication}">
-			 <label class="btn btn-outline-primary" data-bind="attr:         {for: 'afternoon' + id}">Afternoon</label>
-			 <input type="checkbox" class="btn-check" autocomplete="off"     data-bind="attr: {id: 'evening' + id}, checked: evening, event: {change:            $parent.setMedication}">
-			 <label data-bind="attr: {for: 'evening' + id}" class="btn       btn-outline-primary">Evening</label>
+		 <div class="btn-group">
+			 <input type="checkbox" class="btn-check" autocomplete="off" data-bind="attr: {id: 'morning' + id}, checked: morning, event: {change:            $parent.setMedication}">
+			 <label class="btn btn-outline-primary" data-bind="attr: {for: 'morning' + id}">Morning</label>
+			 <input type="checkbox" class="btn-check" autocomplete="off" data-bind="attr: {id: 'afternoon' + id}, checked: afternoon, event: {change:        $parent.setMedication}">
+			 <label class="btn btn-outline-primary" data-bind="attr: {for: 'afternoon' + id}">Afternoon</label>
+			 <input type="checkbox" class="btn-check" autocomplete="off" data-bind="attr: {id: 'evening' + id}, checked: evening, event: {change:            $parent.setMedication}">
+			 <label data-bind="attr: {for: 'evening' + id}" class="btn btn-outline-primary">Evening</label>
 		 </div>
 	 </div>
  </div>

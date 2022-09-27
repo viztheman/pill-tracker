@@ -4,13 +4,13 @@
 	<button class="btn btn-success" type="button" data-bind="event: {click: addMedicationClick}">&plus; Add</button>
 </div>
 <div class="mt-3">
-	<table class="table align-middle">
+	<table class="medication-table table align-middle">
 		<thead>
 			<th></th>
 			<th>Medication</th>
 			<th>Dosage</th>
 		</thead>
-		<tbody style="overflow-x: hidden; overflow-y: auto;" data-bind="foreach: medications">
+		<tbody data-bind="foreach: medications">
 			<tr>
 				<td>
 					<button class="btn btn-danger" data-bind="event: {click: $parent.removeMedicationClick}">&#x1F5D1;</button>
